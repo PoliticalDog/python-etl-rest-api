@@ -1,29 +1,28 @@
-Para poder ejecutar se recomienda instalar los requirements con el comando:
+Se recomienda crear un entorno virtual e instalar dependencias desde requirements.txt
 pip install -r requirements.txt
 
-# stack
-Python
-VS code 
-git --> repositorio remoto estandar 
-docker --> Para practica de dockers y entrega profesional, ademas de aseguirar que funcione la base correctamente en otra maquina
-Mysql --> Se elegio porque tengo mas experiencia y me siento comodo
-FastApi --> Es  el framework mas comun para usar api rest y para practicar
-Uvicorn --> servidor para probar la api
-Swagger UI --> Deja probar apis sin programar un fronted completo
+# Stack / Tecnologías
+* Python: Lenguaje principal para ETL y API.
+* VS Code: Editor de desarrollo.
+* Git: Control de versiones y repositorio remoto estándar.
+* Docker: Aísla y reproduce el entorno de MySQL para asegurar que funcione igual en cualquier máquina.
+* MySQL: Base de datos relacional (elegida por experiencia previa).
+* FastAPI: Framework para API REST por velocidad, validación automática y documentación OpenAPI.
+* Uvicorn: Servidor ASGI para ejecutar la API.
+* Swagger UI: Interfaz web para probar endpoints sin desarrollar un frontend.
 
-# Sección 1: Procesamiento y transferencia de datos
-# Se creo un entonro virtual con env
+# Sección 1: Procesamiento y transferencia de datos (ETL + MySQL)
+Entorno virtual:
 python -m venv venv
 venv\Scripts\activate
 
-# se instalo las bicliotecas y herramientas
+# Instalación de librerías (si no se usa requirements)
 pip install pandas mysql-connector-python python-dotenv
 
-# Se genera el requirements
+# Se genera el requirements (opcional)
 pip freeze > requirements.txt
 
-# Docker levantamiento 
-
+# Levantar MySQL con Docker (PowerShell)
 docker run -d `
   --name pt_mysql `
   -e MYSQL_ROOT_PASSWORD=rootpass `
@@ -34,34 +33,35 @@ docker run -d `
   -v pt_mysql_data:/var/lib/mysql `
   mysql:8.0
 
-Se uso el puerto 3307 ya que el 3306 estandar de mysql lo estoy usando en mi local.
+Se uso el puerto 3307 ya que el 3306 estandar de mysql lo esta usando la instalacion local.
+
+Verificar docker:
+docker ps
 
 # Conectar la instancia de mysql en el docker (comprobacion)
 docker exec -it pt_mysql mysql -u pt_user -p
+docker exec -it pt_mysql mysql -u pt_user -ppt_pass pt_db
+
 
 # Iniciar docker y ejecutar los scripts de creacion y poblacion de tablas
 Para esta seccion se creo la carpeta "sql" donde se guardaron dos scripts para crear las tablas y relaciones de la db como la vista que se pide.
-* 01_schema.sql
-* 02_view.sql
+* 01_schema.sql → tablas y relaciones
+* 02_view.sql → vista solicitada
 
 # Ejecutar el script mysql de creacion de tablas y relaciones en el docker (powershell)
 docker exec -i pt_mysql mysql -u pt_user -ppt_pass pt_db < sql\01_schema.sql
 
-# Crear vista mysql en el docker (powershell)
-docker exec -i pt_mysql mysql -u pt_user -ppt_pass pt_db < sql\02_view.sql
 
-# Carga de datos ETL
-
-# Para poder visualiazar que traia el csv se uso un archivo de jupyter para jugar con el dataframe
-  lectura_prueba_csv.ipynb
-
-en donde se analiza los tipos de datos que hay, ademas de verificar cuantos campos nan y nat hay para no romper el esquema en campos que dicen no nulos, en este caso si hay habra que rellenar con promedios 
-
-# Se analizo el csv con un archivo jupyter y se creo la carpeta "elt" en donde se guardaran los scripts que almacenaran la lectura, transformacion y carga
+# ETL (Transformación y carga)
+# Se analizo el csv con un archivo jupyter 
 * lectura_prueba_csv --> prueba de jupyter para anlisis de los datos
+
+En donde se analiza los tipos de datos que hay, ademas de verificar cuantos campos nan y nat hay para no romper el esquema en campos que dicen no nulos, en este caso si hay habra que rellenar con promedios 
+
+# Se creo la carpeta "elt" en donde se guardaran los scripts que almacenaran la lectura, transformacion y carga
 * etl/03_transform_and_load.py --> contiene todo el scrypot de limpieza y carga a mysql
 
-# Resumen de dificultades tecnicas
+# Resumen de dificultades tecnicas sobre el ETL
 
 1. El primer error que halle fue al momento de cargar a la base mysql en campos que no podian recibir nulos, ya que al leer el csv no verifique que todos las filas tvieran valores, por lo que tuve que validar esa parte
 
@@ -71,7 +71,7 @@ en donde se analiza los tipos de datos que hay, ademas de verificar cuantos camp
 
 4. En amount me volvio a dar error ya que el esquema se puede 16,2, y hay registris que superan ese tamaño de 16, por lo que los que superen se mandan a df_critical
 
-# Flujo ETL
+# Flujo ETL --> 03_transform_and_load.py
 1. Como primer paso se lee el csv y se manipulara un total de 3 df para mantener los datos mas limpios y completos, teniendo en si:
   df_original → datos originales sin modificacion
   df → datos transformados listos para insercion
@@ -114,7 +114,7 @@ Aqui se analizo desde jupyter manualemnte las filas que tiene nulos para entende
 * companies_df
 * charges_df
 
-8. Coencatr a bd mysql y cargar
+8. Conecatr a bd mysql y cargar
 8.1 Cagar companies y evitar duplicados en company
 8.2 cargar charges
 
@@ -145,6 +145,9 @@ Conexión a la base de datos cerrada
   WHERE amount < 0;
 
 
+# Crear vista mysql en el docker (powershell)
+docker exec -i pt_mysql mysql -u pt_user -ppt_pass pt_db < sql\02_view.sql
+
 10. Se ejecuta la vista del archivo:
   sql 02_view.sql, donde se opuede filtrar despues por fecha
 
@@ -165,8 +168,7 @@ Conexión a la base de datos cerrada
   docker exec -i pt_mysql mysql -u pt_user -ppt_pass -e "DESCRIBE charges;" pt_db
 
 # Sección 2: Creación de una API
-
-Me hicieron falta instalar las biblioetcas y se instalan en el entorno con:
+Biblioetcas necesarias en el entorno:
 pip install fastapi
 pip install "uvicorn[standard]"
 
@@ -176,8 +178,9 @@ uvicorn api.main:app --reload
 navegador:
   http://127.0.0.1:8000/docs
 
-* reglas y uso:
+Reglas y uso:
 se despliega la pestaña de "default" que es donde se hara las pruebas
+
 # Post extract
 * post extract --> se presiona "try out" y en el ejemplo se puede modificar el numero de 0 - 100
 * validaciones, si se coloca un numero fuera del intervalo arorja error 400, si se quiere reptir un numero arroja error 400
@@ -192,6 +195,5 @@ faltante = suma_esperada - suma_actual
 Reseta la lista para seguir validando
 
 
-
-# Preparacion para subir al git
-se crreo el gitignore
+# Preparacion para Git
+Se configuro .gitignore
