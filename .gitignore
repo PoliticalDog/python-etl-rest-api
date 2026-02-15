@@ -1,3 +1,23 @@
+# Entornos virtuales
 venv/
 .env
+
+# Python
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos temporales
+*.log
+*.sqlite3
+
+# VS Code
+.vscode/
+
+# Windows
+.DS_Store
+Thumbs.db
+
+# Docker
+*.tar
