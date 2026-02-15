@@ -1,0 +1,15 @@
+id,company_name,company_id,amount,status,created_at,updated_at,_critical_reason
+6b77d36f2ebd5e53a76195c6c1678a5027022f9d,MiPasajefy,,3.0,pending_payment,2019-02-01,,missing_company_id
+,MiPasajefy,cbf1c8b09cd5b549416d49d220a40cbd317f952e,66.16,pending_payment,2019-03-14,,missing_id
+5300670ad03ce15b984a03e5ab49442d61f70c01,MiPasajefy,cbf1c8b09cd5b549416d49d220a40cbd317f952e,55.75,paid,,2019-02-28,missing_created_at
+e5902356495f62a5f8c6f96190a9dd5f0e10c780,MiPasajefy,cbf1c8b09cd5b549416d49d220a40cbd317f952e,91.27,pending_payment,,,missing_created_at
+870f7a34b425bd0bf44660377637a40bc8df65df,MiPasajefy,cbf1c8b09cd5b549416d49d220a40cbd317f952e,55.75,paid,,2019-01-21,missing_created_at
+37fd630d05e0b4c9c179eea6f88541e27adfbd07,MiPasajefy,cbf1c8b09cd5b549416d49d220a40cbd317f952e,,pending_payment,2019-03-27,,invalid_amount
+a98245b3f1e8484f2e65f245ef35051822d0f4fb,MiPasajefy,cbf1c8b09cd5b549416d49d220a40cbd317f952e,,pending_payment,2019-05-09,,invalid_amount
+94f33d3d5a142c7dfcbf247806ad68cf1dc93515,MiPasajefy,cbf1c8b09cd5b549416d49d220a40cbd317f952e,,voided,2019-02-11,,invalid_amount
+a07c65559e91a7b08a25f6c7e9f130cdfb727a42,MiPasajefy,cbf1c8b09cd5b549416d49d220a40cbd317f952e,,voided,2019-04-17,,invalid_amount
+28445567bf15d6751367e3828f39c255546cc1e1,MiPasajefy,,3.0,pending_payment,2019-03-23,,missing_company_id
+654695699dc08392248aedef372f64f0284ecb68,MiPasajefy,,30.8,paid,2019-03-27,2019-03-27,missing_company_id
+6f6e718b9993ac97ff6e19c61498fb8be82320df,MiPasajefy,,69.55,voided,2019-05-10,,missing_company_id
+,MiPasajefy,cbf1c8b09cd5b549416d49d220a40cbd317f952e,55.71,paid,2019-02-13,2019-02-13,missing_id
+,MiPasajefy,cbf1c8b09cd5b549416d49d220a40cbd317f952e,89.36,paid,2019-04-17,2019-04-17,missing_id
